@@ -1,0 +1,942 @@
+{
+  "address": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+  "chainId": 31337,
+  "deployBlock": 1,
+  "abi": [
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "warden",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "constructor"
+    },
+    {
+      "inputs": [],
+      "name": "AlreadyApplied",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "AlreadyRegistered",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "EnforcedPause",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "ExpectedPause",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "InvalidCapacity",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "InvalidRollNo",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "InvalidRoomNumber",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "InvalidYear",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "NoChange",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "NotAllocated",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "NotPending",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "NotVerified",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "NotWaitlisted",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "NothingToEvict",
+      "type": "error"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "owner",
+          "type": "address"
+        }
+      ],
+      "name": "OwnableInvalidOwner",
+      "type": "error"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "account",
+          "type": "address"
+        }
+      ],
+      "name": "OwnableUnauthorizedAccount",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "RenounceDisabled",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "RollNoTaken",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "RoomNotEmpty",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "RoomNotFound",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "RoomNumberTaken",
+      "type": "error"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "student",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "enum HostelAllocation.RoomType",
+          "name": "roomType",
+          "type": "uint8"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint8",
+          "name": "year",
+          "type": "uint8"
+        }
+      ],
+      "name": "AddedToWaitlist",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "student",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "bool",
+          "name": "byWarden",
+          "type": "bool"
+        }
+      ],
+      "name": "LeftWaitlist",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "previousOwner",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "OwnershipTransferred",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "account",
+          "type": "address"
+        }
+      ],
+      "name": "Paused",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "uint32",
+          "name": "roomId",
+          "type": "uint32"
+        },
+        {
+          "indexed": false,
+          "internalType": "string",
+          "name": "number",
+          "type": "string"
+        },
+        {
+          "indexed": false,
+          "internalType": "enum HostelAllocation.RoomType",
+          "name": "roomType",
+          "type": "uint8"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint8",
+          "name": "capacity",
+          "type": "uint8"
+        }
+      ],
+      "name": "RoomAdded",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "student",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "uint32",
+          "name": "roomId",
+          "type": "uint32"
+        },
+        {
+          "indexed": false,
+          "internalType": "bool",
+          "name": "fromWaitlist",
+          "type": "bool"
+        }
+      ],
+      "name": "RoomAllocated",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "uint32",
+          "name": "roomId",
+          "type": "uint32"
+        },
+        {
+          "indexed": false,
+          "internalType": "bool",
+          "name": "underMaintenance",
+          "type": "bool"
+        }
+      ],
+      "name": "RoomMaintenanceChanged",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "student",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "uint32",
+          "name": "roomId",
+          "type": "uint32"
+        },
+        {
+          "indexed": false,
+          "internalType": "bool",
+          "name": "byWarden",
+          "type": "bool"
+        }
+      ],
+      "name": "RoomVacated",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "student",
+          "type": "address"
+        }
+      ],
+      "name": "StudentApproved",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "student",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "string",
+          "name": "rollNo",
+          "type": "string"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint8",
+          "name": "year",
+          "type": "uint8"
+        }
+      ],
+      "name": "StudentRegistered",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "student",
+          "type": "address"
+        }
+      ],
+      "name": "StudentRejected",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "account",
+          "type": "address"
+        }
+      ],
+      "name": "Unpaused",
+      "type": "event"
+    },
+    {
+      "inputs": [],
+      "name": "MAX_CAPACITY",
+      "outputs": [
+        {
+          "internalType": "uint8",
+          "name": "",
+          "type": "uint8"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "MAX_YEAR",
+      "outputs": [
+        {
+          "internalType": "uint8",
+          "name": "",
+          "type": "uint8"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "string",
+          "name": "number",
+          "type": "string"
+        },
+        {
+          "internalType": "enum HostelAllocation.RoomType",
+          "name": "roomType",
+          "type": "uint8"
+        },
+        {
+          "internalType": "uint8",
+          "name": "capacity",
+          "type": "uint8"
+        }
+      ],
+      "name": "addRoom",
+      "outputs": [
+        {
+          "internalType": "uint32",
+          "name": "id",
+          "type": "uint32"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "enum HostelAllocation.RoomType",
+          "name": "roomType",
+          "type": "uint8"
+        }
+      ],
+      "name": "applyForRoom",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "student",
+          "type": "address"
+        }
+      ],
+      "name": "approveStudent",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "cancelApplication",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "student",
+          "type": "address"
+        }
+      ],
+      "name": "evictStudent",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint32",
+          "name": "roomId",
+          "type": "uint32"
+        }
+      ],
+      "name": "getResidents",
+      "outputs": [
+        {
+          "internalType": "address[]",
+          "name": "",
+          "type": "address[]"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint32",
+          "name": "roomId",
+          "type": "uint32"
+        }
+      ],
+      "name": "getRoom",
+      "outputs": [
+        {
+          "components": [
+            {
+              "internalType": "uint32",
+              "name": "id",
+              "type": "uint32"
+            },
+            {
+              "internalType": "string",
+              "name": "number",
+              "type": "string"
+            },
+            {
+              "internalType": "enum HostelAllocation.RoomType",
+              "name": "roomType",
+              "type": "uint8"
+            },
+            {
+              "internalType": "uint8",
+              "name": "capacity",
+              "type": "uint8"
+            },
+            {
+              "internalType": "uint8",
+              "name": "occupied",
+              "type": "uint8"
+            },
+            {
+              "internalType": "bool",
+              "name": "underMaintenance",
+              "type": "bool"
+            }
+          ],
+          "internalType": "struct HostelAllocation.Room",
+          "name": "",
+          "type": "tuple"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint32",
+          "name": "offset",
+          "type": "uint32"
+        },
+        {
+          "internalType": "uint32",
+          "name": "limit",
+          "type": "uint32"
+        }
+      ],
+      "name": "getRooms",
+      "outputs": [
+        {
+          "components": [
+            {
+              "internalType": "uint32",
+              "name": "id",
+              "type": "uint32"
+            },
+            {
+              "internalType": "string",
+              "name": "number",
+              "type": "string"
+            },
+            {
+              "internalType": "enum HostelAllocation.RoomType",
+              "name": "roomType",
+              "type": "uint8"
+            },
+            {
+              "internalType": "uint8",
+              "name": "capacity",
+              "type": "uint8"
+            },
+            {
+              "internalType": "uint8",
+              "name": "occupied",
+              "type": "uint8"
+            },
+            {
+              "internalType": "bool",
+              "name": "underMaintenance",
+              "type": "bool"
+            }
+          ],
+          "internalType": "struct HostelAllocation.Room[]",
+          "name": "out",
+          "type": "tuple[]"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "student",
+          "type": "address"
+        }
+      ],
+      "name": "getStudent",
+      "outputs": [
+        {
+          "components": [
+            {
+              "internalType": "string",
+              "name": "rollNo",
+              "type": "string"
+            },
+            {
+              "internalType": "uint8",
+              "name": "year",
+              "type": "uint8"
+            },
+            {
+              "internalType": "enum HostelAllocation.Registration",
+              "name": "registration",
+              "type": "uint8"
+            },
+            {
+              "internalType": "enum HostelAllocation.Allocation",
+              "name": "allocation",
+              "type": "uint8"
+            },
+            {
+              "internalType": "enum HostelAllocation.RoomType",
+              "name": "requestedType",
+              "type": "uint8"
+            },
+            {
+              "internalType": "uint32",
+              "name": "roomId",
+              "type": "uint32"
+            },
+            {
+              "internalType": "uint64",
+              "name": "ticket",
+              "type": "uint64"
+            }
+          ],
+          "internalType": "struct HostelAllocation.Student",
+          "name": "",
+          "type": "tuple"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "offset",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "limit",
+          "type": "uint256"
+        }
+      ],
+      "name": "getStudents",
+      "outputs": [
+        {
+          "internalType": "address[]",
+          "name": "wallets",
+          "type": "address[]"
+        },
+        {
+          "components": [
+            {
+              "internalType": "string",
+              "name": "rollNo",
+              "type": "string"
+            },
+            {
+              "internalType": "uint8",
+              "name": "year",
+              "type": "uint8"
+            },
+            {
+              "internalType": "enum HostelAllocation.Registration",
+              "name": "registration",
+              "type": "uint8"
+            },
+            {
+              "internalType": "enum HostelAllocation.Allocation",
+              "name": "allocation",
+              "type": "uint8"
+            },
+            {
+              "internalType": "enum HostelAllocation.RoomType",
+              "name": "requestedType",
+              "type": "uint8"
+            },
+            {
+              "internalType": "uint32",
+              "name": "roomId",
+              "type": "uint32"
+            },
+            {
+              "internalType": "uint64",
+              "name": "ticket",
+              "type": "uint64"
+            }
+          ],
+          "internalType": "struct HostelAllocation.Student[]",
+          "name": "data",
+          "type": "tuple[]"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "enum HostelAllocation.RoomType",
+          "name": "roomType",
+          "type": "uint8"
+        }
+      ],
+      "name": "getWaitlist",
+      "outputs": [
+        {
+          "internalType": "address[]",
+          "name": "list",
+          "type": "address[]"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "owner",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "pause",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "paused",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "string",
+          "name": "rollNo",
+          "type": "string"
+        },
+        {
+          "internalType": "uint8",
+          "name": "year",
+          "type": "uint8"
+        }
+      ],
+      "name": "register",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "student",
+          "type": "address"
+        }
+      ],
+      "name": "rejectStudent",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "renounceOwnership",
+      "outputs": [],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "roomCount",
+      "outputs": [
+        {
+          "internalType": "uint32",
+          "name": "",
+          "type": "uint32"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "enum HostelAllocation.RoomType",
+          "name": "roomType",
+          "type": "uint8"
+        }
+      ],
+      "name": "roomsWithVacancy",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint32",
+          "name": "roomId",
+          "type": "uint32"
+        },
+        {
+          "internalType": "bool",
+          "name": "on",
+          "type": "bool"
+        }
+      ],
+      "name": "setMaintenance",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "studentCount",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "transferOwnership",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "unpause",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "vacateRoom",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "enum HostelAllocation.RoomType",
+          "name": "roomType",
+          "type": "uint8"
+        }
+      ],
+      "name": "waitlistLength",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "total",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "student",
+          "type": "address"
+        }
+      ],
+      "name": "waitlistPosition",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    }
+  ]
+}
